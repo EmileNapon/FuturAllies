@@ -14,29 +14,28 @@
     <!-- Entête principale -->
 
 <div class='container'>
-<div class="row">
-  <div class="col-sm-10 mb-10 mb-sm-0">
-    <div class="card" style='border:none; '>
-      <div class="card-body">
+      <div >
           <br/> <br/> 
         <span style='font-size:110%;' *ngFor='let chapitre of chapitreFiltres; let i=index'>
           <h1>
             {{chapitre.titre}}
           </h1>
           <br/>        
-          <div *ngFor='let contenu of ContenusFiltres '>
-            <h3 *ngIf='contenu.chapitre==chapitre.id'>{{contenu.id}}- {{contenu.sous_titre}}</h3>
-            <p *ngIf='contenu.chapitre==chapitre.id'>
+          <div *ngFor='let section of sectionFiltres'>
+            <h3 *ngIf='section.chapitre==chapitre.id'>{{section.id}}- {{section.nom_section}}</h3>
+            <div *ngFor='let contenu of ContenusFiltres'>
+              <p *ngIf='section.chapitre==chapitre.id || contenu.section==contenu.id'>
                 {{contenu.description}}
-              </p>          
+              </p> 
+            </div>
+         
           </div>
             <br/><br/>                
         </span>
       </div>
     </div>
-  </div>
-</div>
-</div>
+ 
+
 
 <footer>
   <div class="footer-bottom" style='text-align: center'>
@@ -45,3 +44,59 @@
 </footer>
 
 </body>
+
+
+
+
+
+<div class="container main-content">
+  <div class="row">
+
+    <h2 class="main-header"  *ngFor='let chapitre of chapitreFiltres; let i=index'>Parcours : {{chapitre.titre}}</h2>
+    <div class="container main-content" *ngIf="sectionFiltres.length > 0; else noChapters">
+      <div >
+      <section class="course-details" *ngFor="let section of sectionFiltres; let i = index">
+        <div>
+       
+          <h2>{{ section.id }} - {{ section.nom_section }}</h2>
+
+          <ul class="objectives-list">
+            <li class="course-section">
+              <section>
+                <hr>
+                <ul class="course-content" *ngFor="let contenu of ContenusFiltres">
+                  <ul class="course-item completed" *ngIf="section.id === section.chapitre || contenu.section==contenu.id">
+                    <span class="status-icon" title="Bravo, vous avez terminé ce chapitre !">
+                      <i class="icon-check2"></i>
+                    </span>
+                    <h4>{{ section.id }}. {{ section.nom_section }}</h4>
+                  </ul>
+                  <div *ngIf='section.chapitre==chapitre.id || contenu.section==contenu.id'>
+                    <p>{{ contenu.description }}</p>
+                  </div>
+                </ul>  
+              </section>
+              </li>
+
+     </ul>
+  
+          </div>
+      </section>
+    </div>
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+    <ng-template #noChapters>
+      <p>Aucun chapitre disponible.</p>
+    </ng-template>
+  </div>
+</div>

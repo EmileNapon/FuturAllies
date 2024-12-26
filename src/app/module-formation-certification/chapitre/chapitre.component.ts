@@ -15,7 +15,11 @@ export class ChapitreComponent implements OnInit {
 
   chapitreId: string | null = null;
   chapitre: any[] = [];
+  section: any[] = [];
   chapitreFiltres: any[] = [];
+  sectionFiltres:any[]=[]
+  Contenus:any[]=[]
+  ContenusFiltres:any[]=[]
 
   ngOnInit(): void {
     // Récupérer l'ID du domaine à partir de l'URL
@@ -27,29 +31,37 @@ export class ChapitreComponent implements OnInit {
   loadChapitres(): void {
     this.chapitreService.getChapitre().subscribe(data => {
       this.chapitre = data;
-      this.filterChapitre(); // Filtrer les matières en fonction de l'ID du domaine
+      this.loadSections(); // Filtrer les matières en fonction de l'ID du domaine
     });
   }
-  filterChapitre(): void {
+
+  loadSections(): void {
+    this.chapitreService.getSection().subscribe(data => {
+      this.section = data;
+      console.log(".......", this.section)
+      this.loadContenu();
+    });
+  }
+
+
+  loadContenu(): void {
+    this.chapitreService.getContenu().subscribe(data => {
+      this.Contenus = data;
+      this.filterData(); // Filtrer les matières en fonction de l'ID du domaine
+    });
+  }
+
+
+  filterData(): void {
     if (this.chapitreId) {  
       this.chapitreFiltres = this.chapitre.filter(chapitre => chapitre.cours == this.chapitreId);
+      this.sectionFiltres = this.section.filter(section => this.chapitreFiltres.some(chapitre =>chapitre.id==section.chapitre));
+      this.ContenusFiltres = this.Contenus.filter(contenu => this.sectionFiltres.some(section=>section.id==contenu.section));
     }
   }
 
     
 
 
-  Contenus:any[]=[]
-  ContenusFiltres:any[]=[]
-  loadContenu(): void {
-    this.chapitreService.getContenu().subscribe(data => {
-      this.Contenus = data;
-      this.filterContenu(); // Filtrer les matières en fonction de l'ID du domaine
-    });
-  }
 
-  filterContenu(): void {    
-      this.ContenusFiltres = this.Contenus.filter(contenu => this.chapitreFiltres.some(chapitre=>chapitre.id==contenu.chapitre));
-      console.log(this.ContenusFiltres)
-  }
 }
