@@ -9,33 +9,45 @@
   <div class="container main-content">
     <div class="row">
 
-      <h2 class="main-header">Parcours certifiant : {{filtredCertificat[0].title}} - {{ currentIndex + 1 }} / {{ filtreListCertificatChapitre.length }} </h2>
+      <h2 class="main-header">Parcours certifiant : {{filtredCertificat[0].title}} - {{ currentIndex + 1 }} / {{ filtreChapitre.length }} </h2>
       
       
    
-      <div class="container main-content" *ngIf="filtreListCertificatChapitre.length > 0; else noChapters">
+      <div class="container main-content" *ngIf="filtreChapitre.length > 0; else noChapters">
         <div >
-        <section class="course-details" *ngFor="let chapitre of filtreListCertificatChapitre; let i = index">
-          <div *ngIf="i === currentIndex">
-         
+        <section class="course-details" *ngFor="let chapitre of filtreChapitre; let i = index">
+          <div *ngIf="i === currentIndex ">
+
             <h2>{{ chapitre.id }} - {{ chapitre.titre }}</h2>
   
-            <ul class="objectives-list" *ngIf='isStatut'>
+            <ul class="objectives-list" >
               <li class="course-section">
+
                 <section>
                   <hr>
-                  <ul class="course-content" *ngFor="let contenu of filtrecertificatContenu">
-                    <ul class="course-item completed" *ngIf="chapitre.id === contenu.chapitre">
+                  <ul class="course-content" *ngFor="let section of filtreSection">
+                    <ul *ngIf="section.chapitre !== chapitre.id">
                       <span class="status-icon" title="Bravo, vous avez terminé ce chapitre !">
                         <i class="icon-check2"></i>
                       </span>
-                      <h4>{{ contenu.id }}. {{ contenu.sous_titre }}</h4>
+                    </ul> 
+                      <section *ngIf='section.chapitre == chapitre.id'>
+                        
+                          <li class="course-item completed">
+                            <p [innerHTML]="section.nom_section"></p>
+                          </li>
+
+                          <div *ngFor="let contenu of filtreContenu" >
+                            <div *ngIf="contenu.section == section.id">
+                            <p [innerHTML]="contenu.description"></p>
+                            </div>
+                          </div>
+                        
+                      </section>
                     </ul>
-                    <div *ngIf="chapitre.id === contenu.chapitre">
-                      <p>{{ contenu.description }}</p>
-                    </div>
-                  </ul>  
+                   
                 </section>
+               
                 <section *ngFor="let question of filtreQuestion" >
                   <hr>
                   <ul class="course-content" *ngIf="chapitre.id === question.chapitre" >
@@ -55,38 +67,31 @@
                     </div>
                   </ul> 
                 </section>
-                <div class="actions" style='padding-left:30px' *ngIf='isStatut'>
+
+                
+                <div class="actions" style='padding-left:30px'>
                   <button class="btn btn-primary" *ngIf="allQuestionsAnswered()"  (click)="submitReponses()">Soumettre</button>
                 </div>
                 </li>
 
-       </ul>
+              </ul>
     
             </div>
         </section>
-      </div>
-  <div *ngIf="!isStatut">
-      <div >
-        <h3>Score pour le chapitre {{ resultat.score.chapitre }} : {{ resultat.score.score }}%</h3>
-        <p>Total des questions : {{ resultat.score.total_questions }}</p>
-        <p>Bonnes réponses : {{ resultat.score.bonnes_reponses }}</p>
-      
-        <p>Détails des réponses :</p>
-        <ul>
-          <li *ngFor="let reponse of resultat.reponses">
-            Question {{ reponse.question }} - Choix sélectionné : {{ reponse.choix }}
-          </li>
-        </ul>
-      </div>
-    </div>
 
+        {{resultat}}
+      </div>
       
-        <div *ngIf='!isStatut' class="actions">
-          <button class="btn btn-secondary" (click)="prevChapter()" [disabled]="canContinue && currentIndex === 0">
+
+
+    {{resultat}}
+      
+        <div  class="actions">
+          <button class="btn btn-secondary" (click)="prevChapter()" [disabled]="currentIndex === 0">
             {{ prevButtonText }}
           </button>
 
-          <button class="btn btn-primary" (click)="nextChapter()" [disabled]="!canContinue || currentIndex === filtreListCertificatChapitre.length - 1">
+          <button class="btn btn-primary" (click)="nextChapter()" [disabled]=" currentIndex === filtreChapitre.length - 1">
      continuer
           </button>
         </div>

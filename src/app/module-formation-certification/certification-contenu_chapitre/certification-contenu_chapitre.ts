@@ -27,22 +27,13 @@ export class certificationContenuChapitreComponent implements OnInit{
   certificatId: string | null = null;
 
   // ListCertificatChapitre: any[]=[]
-  filtredCertificatCours:any[]=[]
 
-  ListCertificat:any[]=[]
-  filtredCertificat:any[]=[]
-
-  coursUseCertification: any[]=[]
-  filtreCoursUseCertification: any[]=[]
 
   cours: any[] = [];
   options: any[]=[]
   tri:any[]=[]
 
-  ListCertificatChapitre:any[]=[]
-  filtreListCertificatChapitre:any[]=[]
-  certificatContenu:any[]=[]
-  filtrecertificatContenu:any[]=[]
+
 
 
   isStatut:boolean=true
@@ -73,17 +64,16 @@ reponses: { question: number; choix: number }[] = [];
     this.certificatId = this.route.snapshot.paramMap.get('idCertificationContenuChapitre');
     this.getCertification()
     
-
-
     
 }
 
 
-
+certificats:any[]=[]
+filtredCertificat:any[]=[]
     getCertification():void{
       this.CertificatService.getCertificat().subscribe(data => {
-        this.ListCertificat = data;
-        this.filtredCertificat = this.ListCertificat.filter(certificat=> certificat.id==this.certificatId);
+        this.certificats = data;
+        this.filtredCertificat = this.certificats.filter(certificat=> certificat.id==this.certificatId);
         console.log('1111111',this.filtredCertificat)
         this.getCours()
       });
@@ -94,73 +84,131 @@ reponses: { question: number; choix: number }[] = [];
   getCours(){
     this.CertificatService.getCours().subscribe(data => {
       this.cours = data;
-      console.log('7777777777',this.cours)
+      console.log('2222222',this.cours)
+      this.loadChapitre()
+    });
+   
+  }
+chapitres:any[]=[]
+  loadChapitre(): void {
+    this.CertificatService.getChapitre().subscribe(data => {
+      this.chapitres = data;
+      console.log('333333333',this.chapitres)
+      this.loadSections();
+    });
+  } 
+
+  sections:any[]=[]
+  loadSections(): void {
+    this.CertificatService.getSection().subscribe(data => {
+      this.sections = data;
+      console.log('444444444444444444444',this.sections)
+      this.loadContenu();
+    });
+  }
+  contenus:any[]=[]
+  loadContenu(): void {
+    this.CertificatService.getContenu().subscribe(data => {
+      this.contenus = data;
+      console.log('555555555555555555555',this.contenus)
       this.getCoursUseCertification()
     });
-   
   }
+
+
+  coursUseCertifications:any[]=[]
   getCoursUseCertification(){
     this.CertificatService.getCoursUseCertification().subscribe(data => {
-      this.coursUseCertification = data;
-      console.log('2222222222222',this.coursUseCertification)
-      this.getCoursUseCertification1()
+      this.coursUseCertifications = data;
+      console.log('666666666666666666666',this.coursUseCertifications)
+      this.getCoursUseCertificationFiltre()
     });
    
   }
 
-  filtreCoursUseCertification1:any[]=[]
+  filtreCoursUseCertifications:any[]=[]
+  filtreCours:any[]=[]
+  filtreListCertificatSection:any[]=[]
+  filtreChapitre:any[]=[]
+  filtreSection:any[]=[]
+  filtreContenu:any[]=[]
 
-  getCoursUseCertification1(){
-    
-    this.filtreCoursUseCertification1 = this.coursUseCertification.filter(coursUseCertification=> coursUseCertification.certification==this.certificatId);
-    this.filtreCoursUseCertification = this.filtreCoursUseCertification1.filter(coursUseCertification=>this.cours.some(cours=> cours.id==coursUseCertification.cours));
-    console.log('cccccccccccc11',this.filtreCoursUseCertification)
-    this.getCertificationChapitre()
+
+  getCoursUseCertificationFiltre(){
+
+    this.filtreCoursUseCertifications = this.coursUseCertifications.filter(coursUseCertification=> coursUseCertification.certification==this.certificatId);
+    console.log('7777777',this.filtreCoursUseCertifications)
+    this.filtreCours = this.cours.filter(cours=>this.filtreCoursUseCertifications.some(filtreCoursUseCertification=> cours.id==filtreCoursUseCertification.cours));
+    console.log('88888888',this.filtreCours)
+    this.filtreChapitre = this.chapitres.filter(chapitre=> this.filtreCours.some(filtreCours=>chapitre.cours==filtreCours.id));
+    console.log('99999999',this.filtreChapitre)
+    this.filtreSection = this.sections.filter(section=> this.filtreChapitre.some(filtreChapitre=>section.chapitre==filtreChapitre.id));
+    console.log('10101010101',this.filtreSection)
+    this.filtreContenu = this.contenus.filter(contenus=> this.filtreSection.some(filtreSection=>contenus.section==filtreSection.id));
+    console.log('11111111111111111111--',this.filtreContenu)
+    this.getQuestion()
   }
 
-    
-    getCertificationChapitre(){
-      this.CertificatService.getChapitre().subscribe(data => {
-        this.ListCertificatChapitre = data;
-        this.filtreListCertificatChapitre = this.ListCertificatChapitre.filter(chapitre=> this.filtreCoursUseCertification.some(filtreCoursUseCertification=>filtreCoursUseCertification.cours==chapitre.cours));
-        console.log('bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',this.filtreListCertificatChapitre)
-        this.CertificatService.getContenu().subscribe(data => {
-          this.certificatContenu = data;
-          this.filtrecertificatContenu = this.certificatContenu.filter(contenu=> this.filtreListCertificatChapitre.some(filtreListCertificatChapitre=>filtreListCertificatChapitre.id==contenu.chapitre))
-          //this.filtrecertificatContenu = this.certificatContenu.filter(contenu=>contenu.chapitre==this.certificatId)
-          .map(contenu => {
-            // Supprimer les balises <p> et </p> avant la sanitisation
-            const descriptionSansP = contenu.description.replace(/<\/?p>/g, '');
-            const sous_titreSansP = contenu.sous_titre.replace(/<\/?p>/g, '');
-            return {
-              ...contenu,sous_titre:DOMPurify.sanitize(sous_titreSansP),
-              description: DOMPurify.sanitize(descriptionSansP)
-            };
-          });
-          console.log('pppppppp',this.filtrecertificatContenu) 
-          // Assurez-vous que les questions sont bien associées
-          this.CertificatService.getQuestion().subscribe(data => {
-            this.questions = data
-            console.log('|||||||||||||||||||||||||||||||||||||', this.filtreListCertificatChapitre)  
-            //this.filtreQuestion= this.questions.filter(question=>question.id==this.certificatId)
-            this.filtreQuestion= this.questions.filter(question=>this.filtreListCertificatChapitre.some(chapitre=>chapitre.id==question.chapitre))
-            this.tri=this.filtreQuestion;
-            console.log('|||||||||||||||||||||||||||||||||||||', this.certificatId)  
-            this.CertificatService.getOption().subscribe(data => {
-              this.options = data
-              console.log('|||||||||||||||||||||||||||||||||||||', this.filtreQuestion,'................')  
 
-            });
+getQuestion(){
+    this.CertificatService.getQuestion().subscribe(data => {
+      this.questions = data
+      console.log('|||||||||||||||||||||||||||||||||||||', this.filtreChapitre)  
+      //this.filtreQuestion= this.questions.filter(question=>question.id==this.certificatId)
+      this.filtreQuestion= this.questions.filter(question=>this.filtreChapitre.some(chapitre=>chapitre.id==question.chapitre))
+      this.tri=this.filtreQuestion;
+      console.log('|||||||||||||||||||||||||||||||||||||', this.certificatId)  
+      this.CertificatService.getOption().subscribe(data => {
+      this.options = data
+      console.log('|||||||||||||||||||||||||||||||||||||', this.filtreQuestion,'................')  
+
+    });
+  });
+
+}
+    
+    // getCertificationChapitre(){
+    //   this.CertificatService.getChapitre().subscribe(data => {
+    //     this.ListCertificatChapitre = data;
+    //     this.filtreListCertificatChapitre = this.ListCertificatChapitre.filter(chapitre=> this.filtreCoursUseCertification.some(filtreCoursUseCertification=>filtreCoursUseCertification.cours==chapitre.cours));
+    //     console.log('bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',this.filtreListCertificatChapitre)
+    //     this.CertificatService.getContenu().subscribe(data => {
+    //       this.certificatContenu = data;
+    //       this.filtrecertificatContenu = this.certificatContenu.filter(contenu=> this.filtreListCertificatChapitre.some(filtreListCertificatChapitre=>filtreListCertificatChapitre.id==contenu.chapitre))
+    //       //this.filtrecertificatContenu = this.certificatContenu.filter(contenu=>contenu.chapitre==this.certificatId)
+    //       .map(contenu => {
+    //         // Supprimer les balises <p> et </p> avant la sanitisation
+    //         const descriptionSansP = contenu.description.replace(/<\/?p>/g, '');
+    //         const sous_titreSansP = contenu.sous_titre.replace(/<\/?p>/g, '');
+    //         return {
+    //           ...contenu,sous_titre:DOMPurify.sanitize(sous_titreSansP),
+    //           description: DOMPurify.sanitize(descriptionSansP)
+    //         };
+    //       });
+    //       console.log('pppppppp',this.filtrecertificatContenu) 
+    //       // Assurez-vous que les questions sont bien associées
+    //       this.CertificatService.getQuestion().subscribe(data => {
+    //         this.questions = data
+    //         console.log('|||||||||||||||||||||||||||||||||||||', this.filtreListCertificatChapitre)  
+    //         //this.filtreQuestion= this.questions.filter(question=>question.id==this.certificatId)
+    //         this.filtreQuestion= this.questions.filter(question=>this.filtreListCertificatChapitre.some(chapitre=>chapitre.id==question.chapitre))
+    //         this.tri=this.filtreQuestion;
+    //         console.log('|||||||||||||||||||||||||||||||||||||', this.certificatId)  
+    //         this.CertificatService.getOption().subscribe(data => {
+    //           this.options = data
+    //           console.log('|||||||||||||||||||||||||||||||||||||', this.filtreQuestion,'................')  
+
+    //         });
   
-          });
+    //       });
 
         
 
-        });
-      });
+    //     });
+    //   });
   
       
-    }
+    // }
 
         // chargement des questions et reponse
 
@@ -187,13 +235,12 @@ resultat: any;
         submitReponses(): void {
           const utilisateurId = 1;
           const chapitreId = 1;
-          
           this.CertificatService.postReponses(utilisateurId,chapitreId,this.reponses).subscribe(result => {
             this.resultat=result
             console.log('Résultat:', result.score.chapitre);
             this.score = result.score.score; // Récupère le score
           });
-          this.isStatut=!this.isStatut
+          
           
         }
 
@@ -224,24 +271,22 @@ fetchTauxSucces(): void {
 
 
 nextChapter() {
-  if (this.currentIndex < this.filtreListCertificatChapitre.length - 1) {
+  if (this.currentIndex < this.filtreChapitre.length - 1) {
     this.currentIndex++;
   }
-  this.isStatut=true
-  this.isStatut2=false
+
 }
 
 // Obtenir le chapitre actuel
 get currentChapitre() {
-  return this.filtreListCertificatChapitre[this.currentIndex];
+  return this.filtreChapitre[this.currentIndex];
 }
 
 prevChapter() {
   if (this.currentIndex > 0) {
     this.currentIndex--;
   }
-  this.isStatut=!this.isStatut
-  this.isStatut2=!this.isStatut2
+
 }
 
 

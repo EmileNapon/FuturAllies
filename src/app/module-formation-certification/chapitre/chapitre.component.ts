@@ -12,7 +12,7 @@ export class ChapitreComponent implements OnInit {
 
   constructor(private chapitreService: ChapitreService, private route: Router,private router: ActivatedRoute) { }
   
-
+  currentIndex = 0;
   chapitreId: string | null = null;
   chapitre: any[] = [];
   section: any[] = [];
@@ -88,7 +88,23 @@ export class ChapitreComponent implements OnInit {
   }
 
     
+  nextChapter(): void {
+    if (this.currentIndex < this.chapitreFiltres.length - 1) {
+      this.currentIndex++;
+    }
+  }
 
+  // Méthode pour reculer d'un chapitre
+  prevChapter(): void {
+    if (this.currentIndex > 0) {
+      this.currentIndex--;
+    }
+  }
+
+  // Obtenir le chapitre actuel
+  get currentChapitre(): string {
+    return this.chapitreFiltres[this.currentIndex];
+  }
 
 
 }

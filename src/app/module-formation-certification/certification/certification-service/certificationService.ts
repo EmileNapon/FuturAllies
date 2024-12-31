@@ -67,7 +67,12 @@ getChapitre(): Observable<any[]> {
   return this.http.get<any[]>(this.chapitreUrl);
 }
 
+private sectionUrl= "http://127.0.0.1:8000/fidalli/section/list_sections";
 
+getSection(): Observable<any[]> {
+  return this.http.get<any[]>(this.sectionUrl);
+
+}
 
 private contenuUrl= "http://127.0.0.1:8000/fidalli/contenus/list_contenus";
 

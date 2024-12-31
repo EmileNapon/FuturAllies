@@ -73,9 +73,9 @@ reponses: { question: number; choix: number }[] = [];
   constructor( private CertificatService:CertificationService, private router: Router, private route: ActivatedRoute){}
   
   ngOnInit(): void {
-    this.certificatId = this.route.snapshot.paramMap.get('idCertification');
+    this.certificatId = this.route.snapshot.paramMap.get('idCertification'); 
     this.getCertification()
-    
+    this.certificatIdDom = Number(this.route.snapshot.paramMap.get('idCertification'))
  
     // this.getCertificationChapitre()
     // this.getCertificationArticle()

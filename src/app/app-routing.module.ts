@@ -111,15 +111,15 @@ const routes: Routes = [
   {path:'certification/:idCertification/certification', component:CertificationContenuComponent},
 
   {path:'parcours/:idCertificationContenuChapitre', component:certificationContenuChapitreComponent},
-  {path:'parcours/certificationContenuChapitre/:idQuiz/quiz', component:certificationContenuChapitreComponent},
+ // {path:'parcours/certificationContenuChapitre/:idQuiz/quiz', component:certificationContenuChapitreComponent},
 
   {path:'usersPages',component:GestionUtilisateursComponent,children:[
     {path:'register', component:RegistrationComponent}, 
     {path:'login', component:ConnexionComponent},
     {path:'login', component:ConnexionComponent},
   ]},
-
-
+  
+  
 
   {path:'gestionnaire',component:GestionUtilisateursComponent,children:[
     {path:'acceuil', component:GestionnaireAcceuilComponent},
