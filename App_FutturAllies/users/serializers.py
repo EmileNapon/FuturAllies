@@ -18,7 +18,11 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         validated_data.pop('password2')
+<<<<<<< HEAD
         role = validated_data.get('role', 'etudiant')
+=======
+        role = validated_data.get('role', 'apprenant')
+>>>>>>> 62a27e3a (Initial commit)
         if role == 'admin':
             user = CustomUser.objects.create_superuser(**validated_data)
         elif role == 'manager':

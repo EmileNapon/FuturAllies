@@ -20,9 +20,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+<<<<<<< HEAD
 SECRET_KEY = 'django-insecure-$@ap%3n)8ae@13y2!)i2flbp3hv1l%c@p3w*srrvr9=vn$sj2_'
 
 # SECURITY WARNING: don't run with debug turned on in production!
+=======
+
+# from decouple import config
+
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+
+SECRET_KEY = 'django-insecure-$@ap%3n)8ae@13y2!)i2flbp3hv1l%c@p3w*srrvr9=vn$sj2_'
+# # SECURITY WARNING: don't run with debug turned on in production!
+>>>>>>> 62a27e3a (Initial commit)
 DEBUG = True
 
 ALLOWED_HOSTS = []
@@ -43,10 +54,17 @@ INSTALLED_APPS = [
     'Formation',
     'programmeTalent',
     'Offres',
+<<<<<<< HEAD
     'corsheaders',
     'rest_framework.authtoken',     ##
    "imputation"
    
+=======
+    "certification",
+    'corsheaders',
+    'rest_framework.authtoken',     ##
+   "imputation"  
+>>>>>>> 62a27e3a (Initial commit)
 ]
 
 
@@ -192,3 +210,9 @@ REST_FRAMEWORK = {
 #         'rest_framework.permissions.AllowAny',
 #     ],
 # }
+<<<<<<< HEAD
+=======
+
+
+
+>>>>>>> 62a27e3a (Initial commit)

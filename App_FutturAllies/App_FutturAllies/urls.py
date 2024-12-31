@@ -23,5 +23,9 @@ urlpatterns = [
     path('fidalli/',include('Formation.url')),
     path('fidalli/',include('Offres.url')),
     path('fidalli/',include('programmeTalent.url')),
+<<<<<<< HEAD
+=======
+    path('fidalli/',include('certification.url')),
+>>>>>>> 62a27e3a (Initial commit)
     path('meteo/',include('imputation.url')),
 ]

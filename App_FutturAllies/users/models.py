@@ -34,7 +34,11 @@ class CustomUserManager(BaseUserManager):
 # Custom user model
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     ROLE_CHOICES = (
+<<<<<<< HEAD
         ('etudiant', 'Etudiant'),
+=======
+        ('apprenant', 'Apprenant'),
+>>>>>>> 62a27e3a (Initial commit)
         ('employeur', 'Employeur'),
     )
 
@@ -43,7 +47,11 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     prenom = models.CharField(max_length=30, blank=True)
     email = models.EmailField(unique=True)
     phone_number=models.CharField(max_length=30, blank=True)
+<<<<<<< HEAD
     role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='Etudiant')
+=======
+    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='Apprenant')
+>>>>>>> 62a27e3a (Initial commit)
     profile_pic = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
 
     is_active = models.BooleanField(default=True)

@@ -1,6 +1,10 @@
 from django.urls import path
 from . import views
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 62a27e3a (Initial commit)
 urlpatterns = [
     path('modules/create/', views.create_module, name='create_module'),
     path('domaines/list_domaines', views.list_domaines, name='list_domaines'), 
@@ -13,14 +17,28 @@ urlpatterns = [
 ##########################################################################################
     path('chapitre/create/', views.create_chapitre, name='create_chapitre'),
     path('chapitre/list_chapitres', views.list_chapitres, name='list_chapitres'), 
+<<<<<<< HEAD
+=======
+
+##########################################################################################
+    path('section/create/', views.create_section, name='create_sectioon'),
+    path('section/list_sections', views.list_section, name='list_sectioon'),
+>>>>>>> 62a27e3a (Initial commit)
 ##########################################################################################
     path('contenu/create/', views.create_contenu, name='create_contenu'),
     path('contenus/list_contenus', views.list_contenus, name='list_contenus'),
     path('contenu/update-contenu/', views.ContentView.as_view(), name='create_contenu'),
+<<<<<<< HEAD
 #########################################################################################
  path('contenu/<int:contenu_id>/', views.ContentView.as_view(), name='detail_contenu'), 
 #########################################################################################
  path('chapitre/<int:chapitre_id>/', views.ChapitreView.as_view(), name='detail_chapitre'), 
+=======
+    #########################################################################################
+    path('contenu/<int:contenu_id>/', views.ContentView.as_view(), name='detail_contenu'), 
+    #########################################################################################
+    path('chapitre/<int:chapitre_id>/', views.ChapitreView.as_view(), name='detail_chapitre'), 
+>>>>>>> 62a27e3a (Initial commit)
 
 #########################################################################################
 
@@ -38,7 +56,11 @@ urlpatterns = [
 
     # Suppression d'un webinaire
     path('webinars/<int:webinar_id>/delete/', views.delete_webinar, name='delete_webinar'),
+<<<<<<< HEAD
     path('webinars/enroll', views.enroll_to_webinar, name='inscrit'),
+=======
+    path('webinarEnrollments/enroll', views.enroll_to_webinar, name='inscrit'),
+>>>>>>> 62a27e3a (Initial commit)
 ]
 
 
